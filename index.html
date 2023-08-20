@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Entry and Search</title>
+</head>
+<body>
+  <h1>Data Entry and Search</h1>
+
+  <form id="dataForm">
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <input type="text" id="searchInput" placeholder="Search by name" onkeyup="searchTable()">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody id="dataTableBody">
+      <!-- Data will be added dynamically here -->
+    </tbody>
+  </table>
+
+  <script>
+    const data = [];
+
+    document.getElementById("dataForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+
+      data.push({ name, email });
+
+      document.getElementById("name").value = "";
+      document.getElementById("email").value = "";
+
+      updateTable();
+    });
+
+    function updateTable(filteredData) {
+      const tableBody = document.getElementById("dataTableBody");
+      tableBody.innerHTML = "";
+
+      const displayData = filteredData || data;
+
+      displayData.forEach(item => {
+        const row = tableBody.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+
+        cell1.innerHTML = item.name;
+        cell2.innerHTML = item.email;
+      });
+    }
+
+    function searchTable() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const filteredData = data.filter(item => item.name.toLowerCase().includes(searchValue));
+      updateTable(filteredData);
+    }
+  </script>
+</body>
+</html>
